@@ -5,55 +5,16 @@ Modal.setAppElement("#root");
 
 function DisplayMovies(props: any) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [ImdbID, setImdbID] = useState("");
-  const [movieResponse, setMovieResponse] = useState([]);
-
-  const ShowModal = (movieResponse: any) => {
-    <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={() => setModalIsOpen(false)}
-      style={{
-        overlay: {
-          backgroundColor: "grey",
-        },
-      }}
-    >
-      {movieResponse.map(
-        (movieDetails: {
-          Title: string;
-          Country: string;
-          imdbRating: string;
-          Plot: string;
-        }) => {
-          return (
-            <div>
-              <h3>{movieDetails.Title}</h3>
-              <div>{movieDetails.Country}</div>
-              <div>{movieDetails.Plot}</div>
-              {(() => {
-                if (parseInt(movieDetails.imdbRating) >= 7)
-                  return <div>boxoffice: hit</div>;
-                else return <div>boxoffice: flop</div>;
-              })()}
-              <button onClick={() => setModalIsOpen(false)}>Close</button>
-              {setMovieResponse([])}
-            </div>
-          );
-        }
-      )}
-    </Modal>;
-  };
+  const [movieResponse, setMovieResponse]: any = useState({});
 
   const KnowMore = (imdbID: string) => {
     const url = "https://www.omdbapi.com/?";
-    setImdbID(imdbID);
-    console.log(`imdB setted to ${imdbID}`);
 
     const fetchData = async () => {
       const response = await fetch(
         url +
           new URLSearchParams({
-            i: ImdbID,
+            i: imdbID,
             plot: "full",
             apikey: "cec03a06",
           })
@@ -83,7 +44,30 @@ function DisplayMovies(props: any) {
               <button onClick={() => KnowMore(movieInfo.imdbID)}>
                 Know More
               </button>
-              {movieResponse.length ? ShowModal(movieResponse) : null}
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                style={{
+                  overlay: {
+                    backgroundColor: "grey",
+                  },
+                }}
+              >
+                <div>
+                  <h3>{movieResponse.Title}</h3>
+                  <p>Release Date</p>
+                  <div>{movieResponse.Country}</div>
+                  <p>{movieResponse.Plot}</p>
+                  <div>imdb Rating: {movieResponse.imdbRating}</div>
+                  <br></br>
+                  {(() => {
+                    if (parseInt(movieResponse.imdbRating) >= 7)
+                      return <b>boxoffice: hit</b>;
+                    else return <b>boxoffice: flop</b>;
+                  })()}
+                  <button onClick={() => setModalIsOpen(false)}>Close</button>
+                </div>
+              </Modal>
             </div>
           );
         }

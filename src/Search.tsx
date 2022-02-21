@@ -5,12 +5,6 @@ function Search() {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
   const [movieResponse, setMovieResponse] = useState([]);
-  // const [currentPage, setcurrentPage] = useState(1);
-
-  // const pages = [];
-  // for (let i = 0; i < Object.keys(movieResponse).length/5; i++){
-  //   pages.push(i)
-  // }
 
   const handleSubmission = (e: any) => {
     e.preventDefault();
@@ -25,7 +19,6 @@ function Search() {
             y: year,
           })
       ).then((res) => res.json());
-      console.log(response);
       setMovieResponse(response.Search);
     };
 
